@@ -1,0 +1,41 @@
+.intro {
+    text-align: center;
+    margin: 20px auto;
+    max-width: 800px;
+  }
+
+  .banner {
+    text-align: center;
+    margin: 20px auto;
+  }
+
+  .banner img {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
+  }
+
+  .book-section {
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  .book-row {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+  }
+
+  .book {
+    width: 18%;
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .book img {
+    width: 100%;
+    height: auto;
+  }

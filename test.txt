@@ -1,0 +1,11 @@
+{
+    "userName": "sv2002",
+    "email": "sahil@gmail.com",
+    "password": "sahil1234",
+    "lastName": "varma",
+    "firstName": "sahil",
+    "accountStatusId": 0,
+    "accountTypeId": 0,
+    "mobileNumber": "987654321",
+    "subscribeToPromo": 1
+}
