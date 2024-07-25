@@ -15,7 +15,7 @@ const NavBar = () => {
     if (isLoggedIn()) {
       navigate("/profile");
     } else {
-      navigate("/");
+      navigate("/login");
     }
   };
 

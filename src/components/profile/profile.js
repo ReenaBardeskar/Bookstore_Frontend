@@ -8,6 +8,13 @@ const Profile = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false); // State to toggle the form
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    mobileNumber: "",
+    password: "",
+  });
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -17,25 +24,51 @@ const Profile = () => {
     navigate("/");
   };
 
+  const fetchUserData = async () => {
+    const username = localStorage.getItem("username");
+    const response = await fetch(`http://localhost:8080/user/${username}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    setUserData(data);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchUserData = async () => {
-      // const token = localStorage.getItem("authToken");
-      const username = localStorage.getItem("username");
-      const response = await fetch(`http://localhost:8080/user/${username}`, {
-        method: "GET",
-        headers: {
-          // Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response.json();
-      setUserData(data);
-      setLoading(false);
-    };
-
     fetchUserData();
   }, []);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const username = localStorage.getItem("username");
+
+    // Update user data
+    await fetch(`http://localhost:8080/user/update/${username}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    fetchUserData();
+    setIsEditing(false);
+  };
 
   return (
     <div>
@@ -63,11 +96,69 @@ const Profile = () => {
                 <label className="value">{userData.email}</label>
               </div>
               <div className="buttondiv">
-                <button>Edit Personal information</button>
+                <button onClick={handleEditClick} className="btns">
+                  Edit Personal information
+                </button>
               </div>
             </div>
           ) : (
             <div>No user data found</div>
+          )}
+
+          {isEditing && (
+            <div className="popup-form">
+              <h2>Edit Personal Information</h2>
+              <form onSubmit={handleFormSubmit}>
+                <div className="line">
+                  <label className="label">First Name:</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleFormChange}
+                  />
+                </div>
+                <div className="line">
+                  <label className="label">Last Name:</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleFormChange}
+                  />
+                </div>
+                <div className="line">
+                  <label className="label">Mobile Number:</label>
+                  <input
+                    type="text"
+                    name="mobileNumber"
+                    value={formData.mobileNumber}
+                    onChange={handleFormChange}
+                  />
+                </div>
+                <div className="line">
+                  <label className="label">password:</label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleFormChange}
+                  />
+                </div>
+                <div className="buttondiv">
+                  <button type="submit" className="btns">
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    className="btns"
+                    onClick={() => setIsEditing(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
           )}
           <hr />
           <div className="address">
@@ -80,7 +171,7 @@ const Profile = () => {
               <label className="value">Ringgold, GA 11111</label>
             </div>
             <div className="buttondiv">
-              <button>Edit address information</button>
+              <button className="btns">Edit address information</button>
             </div>
           </div>
           <hr />
@@ -102,11 +193,11 @@ const Profile = () => {
               <label className="value">***</label>
             </div>
             <div className="buttondiv">
-              <button>Edit payment information</button>
+              <button className="btns">Edit payment information</button>
             </div>
             <div className="buttondiv">
-              <button onClick={handleLogout}>
-                <h2>Logout</h2>
+              <button className="btns" onClick={handleLogout}>
+                LOGOUT
               </button>
             </div>
           </div>
