@@ -5,8 +5,18 @@ import { useNavigate } from "react-router-dom";
 const NavBar = () => {
   const navigate = useNavigate();
 
-  const handleClick = (e) => {
+  const isLoggedIn = () => {
+    const token = localStorage.getItem("authToken");
+    return !!token;
+  };
+
+  const handleProfileClick = (e) => {
     e.preventDefault();
+    if (isLoggedIn()) {
+      navigate("/profile");
+    } else {
+      navigate("/");
+    }
   };
 
   return (
@@ -17,11 +27,7 @@ const NavBar = () => {
             Home
           </a>
         </li>
-        <li>
-          <a href="login" className="navlink">
-            Login
-          </a>
-        </li>
+
         <li>
           <a href="cart" className="navlink">
             View cart
@@ -44,7 +50,16 @@ const NavBar = () => {
           </form>
         </li>
         <li>
-          <a href="profile">
+          {isLoggedIn() ? (
+            <h3>Welcome, {localStorage.getItem("username")}</h3>
+          ) : (
+            <a href="login" className="navlink">
+              Login
+            </a>
+          )}
+        </li>
+        <li>
+          <a href="profile" onClick={handleProfileClick}>
             <img src="profile-icon-9.png" alt="" height="40px" />
           </a>
         </li>

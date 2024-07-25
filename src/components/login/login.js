@@ -9,6 +9,11 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  const userData = {
+    username,
+    password,
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -17,12 +22,13 @@ const Login = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify(userData),
       });
 
       if (response.ok) {
         const token = await response.text(); // Assuming token is returned as plain text
         localStorage.setItem("authToken", token); // Store token in localStorage
+        localStorage.setItem("username", username);
         console.log("Response:", token);
         // Redirect to home page on successful login
         navigate("/");
@@ -43,7 +49,7 @@ const Login = () => {
       <div className="outer-container">
         <div className="login-container">
           <h2>Login</h2>
-          <form action="/" method="get" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <input
               type="text"
               name="username"
