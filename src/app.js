@@ -1,7 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./components/home/HomePage.js";
+import BookDetails from "./components/BookDetails/BookDetails.js";
 import Cart from "./components/cart/cart.js";
 import Login from "./components/login/login.js";
 import Profile from "./components/profile/profile.js";
@@ -16,6 +17,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/books/:isbn" element={<BookDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/profile" element={<Profile />} />

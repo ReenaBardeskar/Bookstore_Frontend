@@ -1,6 +1,8 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./navbar.css";
-import { useNavigate } from "react-router-dom";
+import searchIcon from "../../searchicon.png"; // Adjust the path as needed
+import profileImage from "../../profile-icon-9.png";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -23,44 +25,38 @@ const NavBar = () => {
     <div className="navbar">
       <ul>
         <li>
-          <a href="/" className="navlink">
+          <Link to="/" className="navlink">
             Home
-          </a>
-        </li>
-
-        <li>
-          <a href="cart" className="navlink">
-            View cart
-          </a>
+          </Link>
         </li>
         <li>
-          <form className="searchform" action="search" method="get">
+          <Link to="/cart" className="navlink">
+            View Cart
+          </Link>
+        </li>
+        <li>
+          <form className="searchform">
             <input
               type="text"
               id="searchtext"
               name="searchtext"
               placeholder="Search books..."
             />
-            <input
-              type="image"
-              src="searchicon.png"
-              alt="Search"
-              height="40px"
-            />
+            <input type="image" src={searchIcon} alt="Search" height="40px" />
           </form>
         </li>
         <li>
           {isLoggedIn() ? (
             <h3>Welcome, {localStorage.getItem("username")}</h3>
           ) : (
-            <a href="login" className="navlink">
+            <Link to="/login" className="navlink">
               Login
-            </a>
+            </Link>
           )}
         </li>
         <li>
-          <a href="profile" onClick={handleProfileClick}>
-            <img src="profile-icon-9.png" alt="" height="40px" />
+          <a href="/profile" onClick={handleProfileClick}>
+            <img src={profileImage} alt="" height="40px" />
           </a>
         </li>
       </ul>

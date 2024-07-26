@@ -1,41 +1,81 @@
 .intro {
-    text-align: center;
-    margin: 20px auto;
-    max-width: 800px;
-  }
+  text-align: center;
+  margin: 20px auto;
+  max-width: 800px;
+}
 
-  .banner {
-    text-align: center;
-    margin: 20px auto;
-  }
+.banner {
+  text-align: center;
+  margin: 20px auto;
+}
 
-  .banner img {
-    display: block;
-    margin: 0 auto;
-    width: 100%;
-    max-width: 1200px;
-    height: auto;
-  }
+.banner img {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+}
 
-  .book-section {
-    margin: 20px 0;
-    text-align: center;
-  }
+.book-row {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
 
-  .book-row {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 10px;
-  }
+.book {
+  width: 18%;
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
 
-  .book {
-    width: 18%;
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
-  }
-  
-  .book img {
-    width: 100%;
-    height: auto;
-  }
+.book img {
+  width: 100%;
+  height: auto;
+}
+.homepage {
+  padding: 20px;
+}
+
+.book-list {
+  display: flex;
+  justify-content: space-around;
+
+  flex-wrap: wrap;
+}
+
+.book-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 5px;
+  width: 200px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.book-item img {
+  max-width: 100%;
+  height: auto;
+}
+
+.book-item p {
+  font-size: 0.9em;
+  color: #555;
+}
+
+.btns {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+}
+
+.btns:hover {
+  background-color: #666;
+}
