@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./login.css";
-import NavBar from "../navbar/NavBar.js";
 
 import { useNavigate } from "react-router-dom";
 
@@ -45,7 +44,6 @@ const Login = () => {
 
   return (
     <div className="element">
-      <NavBar />
       <div className="outer-container">
         <div className="login-container">
           <h2>Login</h2>

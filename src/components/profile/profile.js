@@ -1,6 +1,5 @@
 import React from "react";
 import "./profile.css";
-import NavBar from "../navbar/NavBar.js";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -72,7 +71,6 @@ const Profile = () => {
 
   return (
     <div>
-      <NavBar />
       <div className="outer">
         <div className="content">
           <h1>Your profile</h1>

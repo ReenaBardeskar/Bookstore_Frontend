@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./navbar.css";
 import searchIcon from "../../searchicon.png"; // Adjust the path as needed
@@ -6,6 +6,28 @@ import profileImage from "../../profile-icon-9.png";
 
 const NavBar = () => {
   const navigate = useNavigate();
+  const [cartCount, setCartCount] = useState(0);
+
+  const getCartCount = useCallback(() => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    return cart.length;
+  }, []);
+
+  const updateCartCount = useCallback(() => {
+    setCartCount(getCartCount());
+  }, [getCartCount]);
+
+  useEffect(() => {
+    // Update cart count on component mount
+    updateCartCount();
+
+    // Listen to storage changes
+    window.addEventListener("storage", updateCartCount);
+
+    return () => {
+      window.removeEventListener("storage", updateCartCount);
+    };
+  }, [updateCartCount]);
 
   const isLoggedIn = () => {
     const token = localStorage.getItem("authToken");
@@ -32,6 +54,7 @@ const NavBar = () => {
         <li>
           <Link to="/cart" className="navlink">
             View Cart
+            {cartCount > 0 && <span className="cart-count">({cartCount})</span>}
           </Link>
         </li>
         <li>

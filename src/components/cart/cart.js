@@ -1,102 +1,143 @@
 import React from "react";
-import { useEffect } from "react";
-import NavBar from "../navbar/NavBar.js";
+import { useEffect, useState } from "react";
 import "./cart.css";
+import Notification from "../Notification/Notification.js";
 
 const Cart = () => {
+  const [notification, setNotification] = useState(null);
+
+  const [booksInCart, setBooksInCart] = useState([]);
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    const booksInCart = [
-      {
-        title: "Book 1",
-        imgSrc: "path_to_image1.jpg",
-        quantity: "1",
-        price: "65.49$",
-      },
-      {
-        title: "Book 2",
-        imgSrc: "path_to_image2.jpg",
-        quantity: "1",
-        price: "53.29$",
-      },
-      {
-        title: "Book 3",
-        imgSrc: "path_to_image3.jpg",
-        quantity: "1",
-        price: "100.00$",
-      },
-      {
-        title: "Book 4",
-        imgSrc: "path_to_image4.jpg",
-        quantity: "1",
-        price: "12.99$",
-      },
-      {
-        title: "Book 5",
-        imgSrc: "path_to_image5.jpg",
-        quantity: "1",
-        price: "36.15$",
-      },
-      {
-        title: "Book 6",
-        imgSrc: "path_to_image6.jpg",
-        quantity: "1",
-        price: "299.99$",
-      },
-      {
-        title: "Book 7",
-        imgSrc: "path_to_image7.jpg",
-        quantity: "1",
-        price: "80.19$",
-      },
-      {
-        title: "Book 8",
-        imgSrc: "path_to_image8.jpg",
-        quantity: "1",
-        price: "5.99$",
-      },
-      {
-        title: "Book 9",
-        imgSrc: "path_to_image9.jpg",
-        quantity: "1",
-        price: "214.99$",
-      },
-      { title: "Book 10", imgSrc: "path_to_image10.jpg", quantity: "1" },
-    ];
-
-    function createCartElement(book, i) {
-      const element = document.createElement("div");
-      element.className = "cart-element";
-      element.innerHTML = `
-              <img src="${book.imgSrc}" alt="${book.title}">
-              <p class="title">${book.title}</p>
-              <p class="price">${book.price}</p>
-              <p class="quantity" onclick="">Quantity: ${book.quantity}</p>
-              <button type="button" class="increase">Increase</button>
-              <button type="button" class="decrease">Decrease</button>
-              <p class="remove" onclick="">Remove from cart</p>
-          `;
-      return element;
+    const storedList = localStorage.getItem("cart");
+    if (storedList) {
+      setBooksInCart(JSON.parse(storedList));
+    } else {
+      setBooksInCart([]);
     }
-
-    const cartContainer = document.getElementById("cart-container");
-
-    booksInCart.forEach((book, i) => {
-      cartContainer.appendChild(createCartElement(book, i));
-    });
   }, []);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      if (booksInCart.length === 0) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:8080/books/by-isbn", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(booksInCart),
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+
+        // Convert object of objects into an array of objects
+        const booksArray = Object.keys(data).map((key) => data[key]);
+        setBooks(booksArray);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBooks();
+  }, [booksInCart]);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  const handleRemoveFromCart = (isbn) => {
+    // Remove book from local storage
+    const updatedBooksInCart = booksInCart.filter((item) => item !== isbn);
+    localStorage.setItem("cart", JSON.stringify(updatedBooksInCart));
+    setBooksInCart(updatedBooksInCart);
+    window.dispatchEvent(new Event("storage"));
+
+    setNotification("Book removed from cart!");
+    // Optionally, re-fetch the books to update the UI
+    setBooks(books.filter((book) => book.isbn !== isbn));
+  };
+
+  const handleCloseNotification = () => {
+    setNotification(null);
+  };
 
   return (
     <div>
-      <NavBar />
-
-      <div class="top-row">
+      <Notification message={notification} onClose={handleCloseNotification} />
+      <div className="top-row">
         <p></p>
         <h1>Your cart</h1>
-        <a href="/checkout">
-          <button type="button">Proceed to checkout</button>
-        </a>
       </div>
-      <div id="cart-container"></div>
+      <div id="cart-container">
+        <div className="book-details-container">
+          {books.length > 0 ? (
+            <a href="/checkout">
+              <button type="button" className="btns">
+                Proceed to checkout
+              </button>
+            </a>
+          ) : (
+            ""
+          )}
+          {books.length > 0 ? (
+            books.map((book) => (
+              <div className="book-details-card" key={book.bookID}>
+                <div className="card">
+                  <div className="card-image">
+                    <img src={book.imageData} alt={book.title} />
+                  </div>
+                  <div className="card-details">
+                    <div className="price-top-right">
+                      <span className="selling-price">
+                        ${book.sellingPrice}
+                      </span>
+                    </div>
+                    <h1 className="book-title">{book.title}</h1>
+                    <p>
+                      <strong>Author:</strong> {book.author}
+                    </p>
+                    <p>
+                      <strong>Category:</strong> {book.category}
+                    </p>
+                    <p>
+                      <strong>Publisher:</strong> {book.publisher}
+                    </p>
+                    <p>
+                      <strong>Publication Year:</strong> {book.publicationYear}
+                    </p>
+                    <p>
+                      <strong>Edition:</strong> {book.edition}
+                    </p>
+                    <p>
+                      <strong>Description:</strong> {book.description}
+                    </p>
+                    <button
+                      className="btns"
+                      onClick={() => handleRemoveFromCart(book.isbn)}
+                    >
+                      Remove from Cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div>No book in the Cart</div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import NavBar from "../navbar/NavBar";
 import { useNavigate } from "react-router-dom";
+import Notification from "../Notification/Notification.js";
 
 import "./homepage.css"; // Create a CSS file for styling if needed
 
 const HomePage = () => {
+  const [notification, setNotification] = useState(null);
+
   const [topSellers, setTopSellers] = useState([]);
   const [comingSoon, setComingSoon] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,13 +43,31 @@ const HomePage = () => {
     navigate(`/books/${isbn}`);
   };
 
+  const handleAddToCart = (isbn) => {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (!cart.includes(isbn)) {
+      cart.push(isbn);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      window.dispatchEvent(new Event("storage"));
+
+      setNotification("Book added to cart!");
+    } else {
+      setNotification("Book is already in the cart!");
+    }
+  };
+
+  const handleCloseNotification = () => {
+    setNotification(null);
+  };
   if (loading) return <div>Loading...</div>;
 
   return (
     <div>
-      <NavBar />
-
       <div className="homepage">
+        <Notification
+          message={notification}
+          onClose={handleCloseNotification}
+        />
         <div className="intro">
           <h1>FIND YOUR FAVORITE BOOK WITH BOOKSTORE-SYSTEM</h1>
           <p>
@@ -72,7 +92,12 @@ const HomePage = () => {
               >
                 View Details
               </button>
-              <button className="btns">Add to Cart</button>
+              <button
+                className="btns"
+                onClick={() => handleAddToCart(book.isbn)}
+              >
+                Add to Cart
+              </button>
             </div>
           ))}
         </div>

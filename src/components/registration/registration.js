@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./registration.css";
-import NavBar from "../navbar/NavBar.js";
 import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
@@ -47,7 +46,6 @@ const Registration = () => {
 
   return (
     <div>
-      <NavBar />
       <div className="container">
         <h2>Registration Form</h2>
         <form onSubmit={handleSubmit}>

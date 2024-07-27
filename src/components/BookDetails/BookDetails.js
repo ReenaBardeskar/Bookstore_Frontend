@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import NavBar from "../navbar/NavBar";
 import { useParams } from "react-router-dom";
 import "./BookDetails.css";
 
@@ -29,11 +28,21 @@ const BookDetails = () => {
     fetchBookDetails();
   }, [isbn]);
 
+  const handleAddToCart = (isbn) => {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (!cart.includes(isbn)) {
+      cart.push(isbn);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("Book added to cart!");
+    } else {
+      alert("Book is already in the cart!");
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
     <div>
-      <NavBar />
       <div className="book-details-card">
         {book ? (
           <div className="card">
@@ -63,7 +72,10 @@ const BookDetails = () => {
               <p>
                 <strong>Description:</strong> {book.description}
               </p>
-              <button type="submit" className="btns">
+              <button
+                className="btns"
+                onClick={() => handleAddToCart(book.isbn)}
+              >
                 Add to Cart
               </button>
             </div>
