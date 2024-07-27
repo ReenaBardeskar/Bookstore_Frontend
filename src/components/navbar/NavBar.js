@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./navbar.css";
-import searchIcon from "../../searchicon.png"; // Adjust the path as needed
+import searchIcon from "../../searchicon.png"; 
 import profileImage from "../../profile-icon-9.png";
 
 const NavBar = () => {

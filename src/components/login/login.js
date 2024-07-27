@@ -25,12 +25,19 @@ const Login = () => {
       });
 
       if (response.ok) {
-        const token = await response.text(); // Assuming token is returned as plain text
-        localStorage.setItem("authToken", token); // Store token in localStorage
+        const data = await response.json();
+        const token = data.token;
+        const accountTypeId = data.accountTypeId;
+
+        localStorage.setItem("authToken", token); 
         localStorage.setItem("username", username);
+
         console.log("Response:", token);
-        // Redirect to home page on successful login
-        navigate("/");
+        if (accountTypeId === 1) {
+          navigate("/admin-dashboard");
+        } else {
+          navigate("/");
+        }
       } else {
         // Handle login failure
         const errorMessage = await response.text();

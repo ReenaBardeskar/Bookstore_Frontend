@@ -1,0 +1,21 @@
+.admin-dashboard {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.icon-container {
+  text-align: center;
+  cursor: pointer;
+}
+
+.icon-container img {
+  width: 100px;
+  height: 100px;
+}
+
+.icon-container p {
+  margin-top: 10px;
+  font-size: 16px;
+}
