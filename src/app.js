@@ -8,7 +8,7 @@ import Login from "./components/login/login.js";
 import Profile from "./components/profile/profile.js";
 import Checkout from "./components/checkout/checkout.js";
 import Registration from "./components/registration/registration.js";
-import Search from "./components/search/search.js";
+import SearchResults from "./components/searchresults/SearchResults.js";
 import ConfirmCart from "./components/confirmcart/confirmcart.js";
 import ThankYou from "./components/thankyou/thankyou.js";
 import NavBar from "./components/navbar/NavBar.js";
@@ -44,7 +44,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/registration" element={<Registration />} />
-          <Route path="/search" element={<Search />} />
+          <Route path="/search" element={<SearchResults />} />
           <Route path="/confirmcart" element={<ConfirmCart />} />
           <Route path="/thankyou" element={<ThankYou />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />

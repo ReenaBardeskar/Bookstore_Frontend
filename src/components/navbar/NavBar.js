@@ -1,12 +1,19 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./navbar.css";
-import searchIcon from "../../searchicon.png"; 
+import searchIcon from "./search-book-icon.png";
 import profileImage from "../../profile-icon-9.png";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const [cartCount, setCartCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // Navigate to the search page with the query parameter
+    navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
+  };
 
   const getCartCount = useCallback(() => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -63,9 +70,19 @@ const NavBar = () => {
               type="text"
               id="searchtext"
               name="searchtext"
-              placeholder="Search books..."
+              placeholder="Search for books..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <input type="image" src={searchIcon} alt="Search" height="40px" />
+            <button
+              type="submit"
+              src={searchIcon}
+              alt="Search"
+              height="30px"
+              onClick={handleSearch}
+            >
+              <img src={searchIcon} alt="" height="30px" />
+            </button>
           </form>
         </li>
         <li>

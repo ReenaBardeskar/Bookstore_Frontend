@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./BookDetails.css";
+import Notification from "../Notification/Notification.js";
 
 const BookDetails = () => {
   const { isbn } = useParams();
+  const [notification, setNotification] = useState(null);
+
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -33,16 +36,22 @@ const BookDetails = () => {
     if (!cart.includes(isbn)) {
       cart.push(isbn);
       localStorage.setItem("cart", JSON.stringify(cart));
-      alert("Book added to cart!");
+      window.dispatchEvent(new Event("storage"));
+
+      setNotification("Book added to cart!");
     } else {
-      alert("Book is already in the cart!");
+      setNotification("Book is already in the cart!");
     }
+  };
+  const handleCloseNotification = () => {
+    setNotification(null);
   };
 
   if (loading) return <div>Loading...</div>;
 
   return (
     <div>
+      <Notification message={notification} onClose={handleCloseNotification} />
       <div className="book-details-card">
         {book ? (
           <div className="card">

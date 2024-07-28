@@ -48,6 +48,7 @@
 
 .navbar #searchtext {
   background-color: lightgray;
+  padding: 4px;
   font-size: 16px;
   margin-right: 5px;
   border-radius: 8px;
