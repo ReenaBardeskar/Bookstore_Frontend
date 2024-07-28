@@ -1,11 +1,9 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./cart.css";
 import Notification from "../Notification/Notification.js";
 
 const Cart = () => {
   const [notification, setNotification] = useState(null);
-
   const [booksInCart, setBooksInCart] = useState([]);
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,9 +39,10 @@ const Cart = () => {
         }
 
         const data = await response.json();
-
-        // Convert object of objects into an array of objects
-        const booksArray = Object.keys(data).map((key) => data[key]);
+        const booksArray = Object.keys(data).map((key) => ({
+          ...data[key],
+          quantity: 1, // Default quantity
+        }));
         setBooks(booksArray);
       } catch (error) {
         setError(error);
@@ -54,44 +53,69 @@ const Cart = () => {
 
     fetchBooks();
   }, [booksInCart]);
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
 
   const handleRemoveFromCart = (isbn) => {
-    // Remove book from local storage
     const updatedBooksInCart = booksInCart.filter((item) => item !== isbn);
     localStorage.setItem("cart", JSON.stringify(updatedBooksInCart));
     setBooksInCart(updatedBooksInCart);
-    window.dispatchEvent(new Event("storage"));
-
-    setNotification("Book removed from cart!");
-    // Optionally, re-fetch the books to update the UI
     setBooks(books.filter((book) => book.isbn !== isbn));
+    setNotification("Book removed from cart!");
+  };
+
+  const handleIncreaseQuantity = (isbn) => {
+    setBooks((prevBooks) =>
+      prevBooks.map((book) =>
+        book.isbn === isbn ? { ...book, quantity: book.quantity + 1 } : book
+      )
+    );
+  };
+
+  const handleDecreaseQuantity = (isbn) => {
+    setBooks((prevBooks) =>
+      prevBooks.map((book) =>
+        book.isbn === isbn && book.quantity > 1
+          ? { ...book, quantity: book.quantity - 1 }
+          : book
+      )
+    );
   };
 
   const handleCloseNotification = () => {
     setNotification(null);
   };
 
+  const calculateTotal = () => {
+    return books
+      .reduce((total, book) => total + book.sellingPrice * book.quantity, 0)
+      .toFixed(2);
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
   return (
     <div>
       <Notification message={notification} onClose={handleCloseNotification} />
       <div className="top-row">
-        <p></p>
         <h1>Your cart</h1>
       </div>
       <div id="cart-container">
         <div className="book-details-container">
           {books.length > 0 ? (
-            <a href="/checkout">
+            <>
+              <a href="/checkout">
+                <button type="button" className="btns">
+                  Proceed to checkout
+                </button>
+              </a>
               <button type="button" className="btns">
-                Proceed to checkout
+                Total: ${calculateTotal()}
               </button>
-            </a>
+            </>
           ) : (
-            ""
+            "No books in the Cart"
           )}
-          {books.length > 0 ? (
+          {books.length > 0 &&
             books.map((book) => (
               <div className="book-details-card" key={book.bookID}>
                 <div className="card">
@@ -129,15 +153,25 @@ const Cart = () => {
                     >
                       Remove from Cart
                     </button>
-                    <button className="btns">+ Qunatity</button>
-                    <button className="btns">- Qunatity</button>
+                    <div className="quantity-controls">
+                      <button
+                        className="btns"
+                        onClick={() => handleDecreaseQuantity(book.isbn)}
+                      >
+                        -
+                      </button>
+                      <span className="quantity">{book.quantity}</span>
+                      <button
+                        className="btns"
+                        onClick={() => handleIncreaseQuantity(book.isbn)}
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            ))
-          ) : (
-            <div>No book in the Cart</div>
-          )}
+            ))}
         </div>
       </div>
     </div>
