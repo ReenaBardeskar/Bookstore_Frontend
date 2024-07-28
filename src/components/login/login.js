@@ -29,7 +29,7 @@ const Login = () => {
         const token = data.token;
         const accountTypeId = data.accountTypeId;
 
-        localStorage.setItem("authToken", token); 
+        localStorage.setItem("authToken", token);
         localStorage.setItem("username", username);
 
         console.log("Response:", token);
@@ -39,13 +39,20 @@ const Login = () => {
           navigate("/");
         }
       } else {
-        // Handle login failure
         const errorMessage = await response.text();
-        console.log(errorMessage);
+        if (response.status === 403) {
+          alert("Incorrect username or password. Please try again.");
+        } else if (response.status === 428) {
+          alert(errorMessage);
+        } else {
+          // Handle other errors
+          alert(`Error: ${errorMessage}`);
+        }
       }
     } catch (error) {
       // Handle network errors or other issues
-      console.log(error);
+      // console.log(error);
+      alert("Network error. Please try again later.");
     }
   };
 

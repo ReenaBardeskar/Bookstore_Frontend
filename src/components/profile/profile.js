@@ -18,8 +18,7 @@ const Profile = () => {
   const handleLogout = (e) => {
     e.preventDefault();
     localStorage.clear();
-    console.log("jwt token = ", localStorage.getItem("authtoken"));
-    console.log("logout successful");
+    alert("Logout Successful!!");
     navigate("/");
   };
 

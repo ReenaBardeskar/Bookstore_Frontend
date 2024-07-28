@@ -129,6 +129,8 @@ const Cart = () => {
                     >
                       Remove from Cart
                     </button>
+                    <button className="btns">+ Qunatity</button>
+                    <button className="btns">- Qunatity</button>
                   </div>
                 </div>
               </div>

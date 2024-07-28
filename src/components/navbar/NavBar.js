@@ -58,12 +58,7 @@ const NavBar = () => {
             Home
           </Link>
         </li>
-        <li>
-          <Link to="/cart" className="navlink">
-            View Cart
-            {cartCount > 0 && <span className="cart-count">({cartCount})</span>}
-          </Link>
-        </li>
+
         <li>
           <form className="searchform">
             <input
@@ -84,6 +79,12 @@ const NavBar = () => {
               <img src={searchIcon} alt="" height="30px" />
             </button>
           </form>
+        </li>
+        <li>
+          <Link to="/cart" className="navlink">
+            View Cart
+            {cartCount > 0 && <span className="cart-count">({cartCount})</span>}
+          </Link>
         </li>
         <li>
           {isLoggedIn() ? (
