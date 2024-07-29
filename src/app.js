@@ -5,6 +5,8 @@ import HomePage from "./components/home/HomePage.js";
 import BookDetails from "./components/BookDetails/BookDetails.js";
 import Cart from "./components/cart/cart.js";
 import Login from "./components/login/login.js";
+import ForgotPasswordForm from "./components/forgotpasswordform/ForgotPasswordForm.js";
+import ResetPasswordForm from "./components/resetpasswordform/ResetPasswordForm.js";
 import Profile from "./components/profile/profile.js";
 import Checkout from "./components/checkout/checkout.js";
 import Registration from "./components/registration/registration.js";
@@ -40,6 +42,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/books/:isbn" element={<BookDetails />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPasswordForm />} />
+          <Route path="/reset-password" element={<ResetPasswordForm />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/checkout" element={<Checkout />} />

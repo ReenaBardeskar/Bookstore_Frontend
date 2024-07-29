@@ -56,6 +56,11 @@ const Login = () => {
     }
   };
 
+  const handleForgotPassword = (e) => {
+    e.preventDefault();
+    navigate("/forgot-password");
+  };
+
   return (
     <div className="element">
       <div className="outer-container">
@@ -79,10 +84,14 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
             <input type="submit" value="Enter" />
+            <p>____</p>
+            <button className="btns">
+              Don't have an account? <a href="registration">Register instead</a>
+            </button>
+            <button className="btns" onClick={handleForgotPassword}>
+              Forgot Password?
+            </button>
           </form>
-          <p>
-            Don't have an account? <a href="registration">Register instead</a>
-          </p>
         </div>
       </div>
     </div>
