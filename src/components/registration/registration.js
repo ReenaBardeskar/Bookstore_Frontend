@@ -12,36 +12,59 @@ const Registration = () => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [subscribeToPromo, setSubscribeToPromo] = useState(false);
 
+  const [showAddress, setShowAddress] = useState(false);
+  const [addressLine1, setAddressLine1] = useState("");
+  const [addressLine2, setAddressLine2] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zipCode, setZipCode] = useState("");
+
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prepare data object to send to backend
     const userData = {
       userName: username,
       email,
       password,
       lastName,
       firstName,
-      accountStatusId: 0,
-      accountTypeId: 0,
       mobileNumber,
-      subscribeToPromo: subscribeToPromo ? 1 : 0,
+      subscribeToPromo,
+      shippingAddress: showAddress
+        ? {
+            street: `${addressLine1} ${addressLine2}`,
+            city,
+            state,
+            zipCode,
+          }
+        : null,
     };
 
-    // Example: Send data to backend or process further
-    fetch("http://localhost:8080/user/add", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
-    })
-      .then(() => {
-        console.log("Submitted Data:", userData);
-      })
-      .then(() => {
-        navigate("/");
+    try {
+      const response = await fetch("http://localhost:8080/user/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
       });
+
+      const responseData = await response.text();
+      if (response.ok) {
+        console.log("Submitted Data:", userData);
+        if (showAddress) {
+          alert(responseData + "\nAddress also Updated");
+        } else {
+          alert(responseData + "\nAddress NOT Updated");
+        }
+        navigate("/");
+      } else {
+        const errorData = await response.json();
+        console.error("Error:", errorData);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -131,7 +154,6 @@ const Registration = () => {
               onChange={(e) => setMobileNumber(e.target.value)}
             />
           </div>
-
           <div className="form-group">
             <label htmlFor="subscribeToPromo">Subscribe to Promo</label>
             <input
@@ -142,6 +164,73 @@ const Registration = () => {
               onChange={(e) => setSubscribeToPromo(e.target.checked)}
             />
           </div>
+
+          <div className="form-group">
+            <label htmlFor="showAddress">Add Address</label>
+            <input
+              type="checkbox"
+              id="showAddress"
+              name="showAddress"
+              checked={showAddress}
+              onChange={(e) => setShowAddress(e.target.checked)}
+            />
+          </div>
+
+          {showAddress && (
+            <div className="address-section">
+              <div className="form-group">
+                <label htmlFor="addressLine1">Address Line 1</label>
+                <input
+                  type="text"
+                  id="addressLine1"
+                  name="addressLine1"
+                  value={addressLine1}
+                  onChange={(e) => setAddressLine1(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="addressLine2">Address Line 2</label>
+                <input
+                  type="text"
+                  id="addressLine2"
+                  name="addressLine2"
+                  value={addressLine2}
+                  onChange={(e) => setAddressLine2(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="city">City</label>
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="state">State</label>
+                <input
+                  type="text"
+                  id="state"
+                  name="state"
+                  value={state}
+                  onChange={(e) => setState(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="zipCode">Zip Code</label>
+                <input
+                  type="text"
+                  id="zipCode"
+                  name="zipCode"
+                  value={zipCode}
+                  onChange={(e) => setZipCode(e.target.value)}
+                />
+              </div>
+            </div>
+          )}
+
           <button type="submit">Register</button>
         </form>
       </div>
