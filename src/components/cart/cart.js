@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
 import "./cart.css";
 import Notification from "../Notification/Notification.js";
 
 const Cart = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
   const [notification, setNotification] = useState(null);
   const [booksInCart, setBooksInCart] = useState([]);
   const [books, setBooks] = useState([]);
@@ -90,6 +92,25 @@ const Cart = () => {
       .toFixed(2);
   };
 
+  const handleProceedToCheckout = () => {
+    const username = localStorage.getItem("username");
+    if (!username) {
+      alert("Please log in to proceed to checkout.");
+      navigate("/login");
+    } else {
+      // Create key-value pairs for ISBN and quantity
+      const bookQuantities = books.reduce((acc, book) => {
+        acc[book.isbn] = book.quantity;
+        return acc;
+      }, {});
+
+      // Save book quantities to local storage
+      localStorage.setItem("bookquantities", JSON.stringify(bookQuantities));
+      localStorage.setItem("cart", JSON.stringify(booksInCart));
+      navigate("/checkout");
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -103,11 +124,13 @@ const Cart = () => {
         <div className="book-details-container">
           {books.length > 0 ? (
             <>
-              <a href="/checkout">
-                <button type="button" className="btns">
-                  Proceed to checkout
-                </button>
-              </a>
+              <button
+                type="button"
+                className="btns"
+                onClick={handleProceedToCheckout} // Update this button to handle checkout
+              >
+                Proceed to Checkout
+              </button>
               <button type="button" className="btns">
                 Total: ${calculateTotal()}
               </button>

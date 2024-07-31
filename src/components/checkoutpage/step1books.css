@@ -1,0 +1,79 @@
+/* Step1Books.css */
+
+.step1-books-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.book-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  margin: 10px auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.card-image {
+  flex: 1;
+  max-width: 150px;
+  overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: auto;
+}
+
+.card-details {
+  flex: 3;
+  padding: 10px;
+  position: relative;
+}
+
+.price-top-right {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.selling-price {
+  font-weight: bold;
+  color: #333;
+}
+
+.book-title {
+  font-size: 1.2em;
+  margin: 10px 0;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.btns {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  margin: 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.remove-btn {
+  background-color: #dc3545;
+}
+
+.next-button {
+  margin-top: 20px;
+  display: block;
+  width: 100%;
+}

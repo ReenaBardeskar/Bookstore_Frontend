@@ -22,7 +22,8 @@ const Profile = () => {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    localStorage.clear();
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("username");
     alert("Logout Successful!!");
     navigate("/");
   };

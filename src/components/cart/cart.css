@@ -5,15 +5,18 @@ body {
 
 .top-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
   margin: 20px;
+  width: 100%;
 }
 
 #cart-container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .book-details-container {

@@ -8,7 +8,7 @@ import Login from "./components/login/login.js";
 import ForgotPasswordForm from "./components/forgotpasswordform/ForgotPasswordForm.js";
 import ResetPasswordForm from "./components/resetpasswordform/ResetPasswordForm.js";
 import Profile from "./components/profile/profile.js";
-import Checkout from "./components/checkout/checkout.js";
+import Checkout from "./components/checkoutpage/CheckoutPage.js";
 import Registration from "./components/registration/registration.js";
 import SearchResults from "./components/searchresults/SearchResults.js";
 import ConfirmCart from "./components/confirmcart/confirmcart.js";
