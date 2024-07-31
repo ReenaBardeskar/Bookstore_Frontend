@@ -8,6 +8,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const [cartCount, setCartCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchCategory, setSearchCategory] = useState("By title");
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -58,8 +59,16 @@ const NavBar = () => {
             Home
           </Link>
         </li>
-
         <li>
+          <div class="dropdown">
+            <button class="selection">{searchCategory}</button>
+            <div class="dropdown-content">
+              <a href="#" onClick={(e) => setSearchCategory("By title")}>By title</a>
+              <a href="#" onClick={(e) => setSearchCategory("By genre")}>By genre</a>
+              <a href="#" onClick={(e) => setSearchCategory("By ISBN")}>By ISBN</a>
+              <a href="#" onClick={(e) => setSearchCategory("By author")}>By author</a>
+            </div>
+          </div>
           <form className="searchform">
             <input
               type="text"
