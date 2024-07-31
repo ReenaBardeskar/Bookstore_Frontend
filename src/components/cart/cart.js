@@ -102,16 +102,16 @@ const Cart = () => {
       <div id="cart-container">
         <div className="book-details-container">
           {books.length > 0 ? (
-            <>
+            <div class="top-buttons">
+              <button type="button" className="btns" id="total">
+                Total: ${calculateTotal()}
+              </button>
               <a href="/checkout">
                 <button type="button" className="btns">
                   Proceed to checkout
                 </button>
               </a>
-              <button type="button" className="btns">
-                Total: ${calculateTotal()}
-              </button>
-            </>
+            </div>
           ) : (
             "No books in the Cart"
           )}
