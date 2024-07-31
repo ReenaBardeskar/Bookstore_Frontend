@@ -3,15 +3,22 @@ import "./profile.css";
 import { useNavigate } from "react-router-dom";
 import PopupUser from "./PopupUser";
 import PopupAddress from "./PopupAddress";
+import PopupCard from "./PopupCard";
 
 const Profile = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const [isEditing, setIsEditing] = useState(false); // State to toggle the form for user details
   const [isEditingAddress, setIsEditingAddress] = useState(false); // State to toggle the form for address
+  const [isEditingCard, setIsEditingCard] = useState(false); // State to toggle the card form
+
   const [addressData, setAddressData] = useState(null); // State for address data
   const [addressError, setAddressError] = useState(null); // State for address error
+
+  const [cardData, setCardData] = useState(null);
+  const [cardError, setCardError] = useState(null);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -68,9 +75,44 @@ const Profile = () => {
     }
   };
 
+  const fetchPaymentCard = async () => {
+    const username = localStorage.getItem("username");
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/user/payment?username=${username}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.message) {
+          setCardData(null);
+          setCardError(data.message);
+        } else {
+          setCardData(data);
+          setCardError(null);
+        }
+      } else {
+        setCardData(null);
+        setCardError("Unable to fetch payment card.");
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+      setCardData(null);
+      setCardError("An error occurred while fetching the payment card.");
+    }
+  };
+
   useEffect(() => {
     fetchUserData();
     fetchUserAddress();
+    fetchPaymentCard();
   }, []);
 
   const handleEditUserClick = () => {
@@ -79,6 +121,14 @@ const Profile = () => {
 
   const handleEditAddressClick = () => {
     setIsEditingAddress(true);
+  };
+
+  const handleEditCardClick = () => {
+    setIsEditingCard(true);
+  };
+
+  const handleCardSave = () => {
+    fetchPaymentCard();
   };
 
   return (
@@ -114,21 +164,18 @@ const Profile = () => {
           ) : (
             <div>No user data found</div>
           )}
-
           <PopupUser
             isEditing={isEditing}
             setIsEditing={setIsEditing}
             userData={userData}
             fetchUserData={fetchUserData}
           />
-
           <PopupAddress
             isEditingAddress={isEditingAddress}
             setIsEditingAddress={setIsEditingAddress}
             addressData={addressData} // Pass address data to PopupAddress
             fetchUserAddress={fetchUserAddress} // Fetch updated address after saving
           />
-
           <hr />
           <div className="address">
             {addressError ? (
@@ -180,33 +227,57 @@ const Profile = () => {
               </button>
             </div>
           </div>
-
           <hr />
           <div className="payment">
-            <div className="line">
-              <label className="label">Credit card type:</label>
-              <label className="value">VISA</label>
+            {cardError ? (
+              <div>
+                <div className="line">
+                  <label className="label">Payment Card:</label>
+                  <label className="value">{cardError}</label>
+                </div>
+              </div>
+            ) : cardData ? (
+              <div>
+                <div className="line">
+                  <label className="label">Card Holder:</label>
+                  <label className="value">{cardData.cardHolder}</label>
+                </div>
+                <div className="line">
+                  <label className="label">Card Number:</label>
+                  <label className="value">{cardData.cardNumber}</label>
+                </div>
+                <div className="line">
+                  <label className="label">Expiry Date:</label>
+                  <label className="value">{cardData.expiryDate}</label>
+                </div>
+                <div className="line">
+                  <label className="label">Card Type:</label>
+                  <label className="value">{cardData.cardType}</label>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div className="line">
+                  <label className="label">Payment Card:</label>
+                  <label className="value">Loading...</label>
+                </div>
+              </div>
+            )}
+            <div className="buttondiv" onClick={handleEditCardClick}>
+              <button className="btns">Edit Payment Card Information</button>
             </div>
-            <div className="line">
-              <label className="label">Credit card number:</label>
-              <label className="value">1111-1111-1111-****</label>
-            </div>
-            <div className="line">
-              <label className="label">Expiration date:</label>
-              <label className="value">06/27</label>
-            </div>
-            <div className="line">
-              <label className="label">CVV:</label>
-              <label className="value">***</label>
-            </div>
-            <div className="buttondiv">
-              <button className="btns">Edit payment information</button>
-            </div>
-            <div className="buttondiv">
-              <button className="btns" onClick={handleLogout}>
-                LOGOUT
-              </button>
-            </div>
+          </div>
+          {isEditingCard && (
+            <PopupCard
+              username={localStorage.getItem("username")}
+              onClose={() => setIsEditingCard(false)}
+              onSave={handleCardSave}
+            />
+          )}
+          <div className="buttondiv">
+            <button className="btns" onClick={handleLogout}>
+              LOGOUT
+            </button>
           </div>
         </div>
       </div>
