@@ -129,6 +129,12 @@ const Step3Payment = ({ onPaymentUpdate, onPromoUpdate }) => {
               <label className="label">Card Type:</label>
               <label className="value">{paymentCardData.cardType}</label>
             </div>
+            <div className="line">
+              <div className="label">
+                <label>CVV:</label>
+                <input type="text" name="cvv" />
+              </div>
+            </div>
           </div>
         ) : (
           <div>
