@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./step3payment.css";
 
-const Step3Payment = ({ onPaymentUpdate }) => {
+const Step3Payment = ({ onPaymentUpdate, onPromoUpdate }) => {
   const [paymentCardData, setPaymentCardData] = useState(null);
   const [paymentCardError, setPaymentCardError] = useState(null);
   const [editingPaymentCard, setEditingPaymentCard] = useState(false);
+  const [promo, setPromo] = useState("");
+
+  const handleInputChange = (event) => {
+    setPromo(event.target.value); // Update state with user input
+  };
 
   const fetchPaymentCard = useCallback(async () => {
     const username = localStorage.getItem("username");
@@ -45,7 +50,8 @@ const Step3Payment = ({ onPaymentUpdate }) => {
 
   useEffect(() => {
     fetchPaymentCard();
-  }, [fetchPaymentCard]); // Dependency on fetchPaymentCard
+    onPromoUpdate(promo);
+  }, [fetchPaymentCard, onPromoUpdate, promo]); // Dependency on fetchPaymentCard
 
   const handleEditPaymentCardClick = () => {
     setEditingPaymentCard(true);
@@ -55,13 +61,16 @@ const Step3Payment = ({ onPaymentUpdate }) => {
     const username = localStorage.getItem("username");
 
     try {
-      const response = await fetch(`http://localhost:8080/user/payment`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, ...updatedPaymentCard }),
-      });
+      const response = await fetch(
+        `http://localhost:8080/user/payment?username=${username}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedPaymentCard),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -137,7 +146,12 @@ const Step3Payment = ({ onPaymentUpdate }) => {
         <div className="line">
           <div className="form-group">
             <label>Have a Promo Code?</label>
-            <input type="text" name="promoCode" defaultValue={""} />
+            <input
+              type="text"
+              name="promoCode"
+              value={promo}
+              onChange={handleInputChange}
+            />
           </div>
         </div>
       </div>
