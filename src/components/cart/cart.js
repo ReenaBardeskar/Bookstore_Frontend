@@ -123,7 +123,10 @@ const Cart = () => {
       <div id="cart-container">
         <div className="book-details-container">
           {books.length > 0 ? (
-            <>
+            <div class="top-buttons">
+              <button type="button" className="btns" id="total">
+                Total: ${calculateTotal()}
+              </button>
               <button
                 type="button"
                 className="btns"
@@ -131,10 +134,7 @@ const Cart = () => {
               >
                 Proceed to Checkout
               </button>
-              <button type="button" className="btns">
-                Total: ${calculateTotal()}
-              </button>
-            </>
+            </div>
           ) : (
             "No books in the Cart"
           )}

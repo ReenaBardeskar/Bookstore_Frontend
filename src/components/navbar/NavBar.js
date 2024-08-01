@@ -8,7 +8,13 @@ const NavBar = () => {
   const navigate = useNavigate();
   const [cartCount, setCartCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchCategory, setSearchCategory] = useState("By title");
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
   const handleSearch = (e) => {
     e.preventDefault();
     // Navigate to the search page with the query parameter
@@ -60,6 +66,27 @@ const NavBar = () => {
         </li>
 
         <li>
+          <div className="dropdown">
+            <button className="selection" onClick={toggleDropdown}>
+              {searchCategory}
+            </button>
+            {isOpen && (
+              <div className="dropdown-content">
+                <button onClick={() => setSearchCategory("By title")}>
+                  By title
+                </button>
+                <button onClick={() => setSearchCategory("By genre")}>
+                  By genre
+                </button>
+                <button onClick={() => setSearchCategory("By ISBN")}>
+                  By ISBN
+                </button>
+                <button onClick={() => setSearchCategory("By author")}>
+                  By author
+                </button>
+              </div>
+            )}
+          </div>
           <form className="searchform">
             <input
               type="text"

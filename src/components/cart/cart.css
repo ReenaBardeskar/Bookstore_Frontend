@@ -2,13 +2,16 @@
 body {
   font-family: Arial, sans-serif;
 }
-
 .top-row {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
   margin: 20px;
-  width: 100%;
+  width: 350%;
+}
+
+.top-row h1 {
+  margin-top: 20px;
 }
 
 #cart-container {

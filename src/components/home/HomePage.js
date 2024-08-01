@@ -25,9 +25,25 @@ const HomePage = () => {
 
         // Convert object of objects into an array of objects
         const booksArray = Object.keys(data).map((key) => data[key]);
+        const topBooksArray = [
+          booksArray[0],
+          booksArray[1],
+          booksArray[2],
+          booksArray[3],
+          booksArray[4],
+          booksArray[5],
+        ];
+        const soonBooksArray = [
+          booksArray[6],
+          booksArray[7],
+          booksArray[8],
+          booksArray[9],
+          booksArray[11],
+          booksArray[12],
+        ];
 
-        setTopSellers(booksArray);
-        setComingSoon(booksArray);
+        setTopSellers(topBooksArray);
+        setComingSoon(soonBooksArray);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching books:", error);
